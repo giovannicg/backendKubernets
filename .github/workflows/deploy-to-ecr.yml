@@ -38,6 +38,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ env.IMAGE_NAME }}
         IMAGE_NAME: ${{ env.IMAGE_NAME }}
         IMAGE_TAG: ${{ steps.docker-tag.outputs.tag }}
       run: |
