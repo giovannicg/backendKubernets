@@ -21,7 +21,7 @@ jobs:
 
     # 3. Configurar variables
     - name: Set up environment variables
-      run: echo "IMAGE_NAME=my-app" >> $GITHUB_ENV
+      run: echo "IMAGE_NAME=dev/my_app" >> $GITHUB_ENV
 
     # 4. Construir la imagen Docker
     - name: Build Docker image
