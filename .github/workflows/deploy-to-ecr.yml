@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    environment: dev 
     steps:
     # 1. Configurar el repositorio
     - name: Checkout Code
