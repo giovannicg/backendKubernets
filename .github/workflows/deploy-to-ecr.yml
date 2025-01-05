@@ -1,0 +1,41 @@
+name: Build and Deploy to ECR
+
+on:
+  push:
+    branches:
+      - master  # Ejecutar cuando se haga push en la rama 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Configurar el repositorio
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Autenticarse en AWS ECR
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    # 3. Configurar variables
+    - name: Set up environment variables
+      run: echo "IMAGE_NAME=my-app" >> $GITHUB_ENV
+
+    # 4. Construir la imagen Docker
+    - name: Build Docker image
+      run: |
+        docker build -t $IMAGE_NAME:latest .
+
+    # 5. Etiquetar la imagen para ECR
+    - name: Tag Docker image
+      run: |
+        IMAGE_URI="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/$IMAGE_NAME"
+        docker tag $IMAGE_NAME:latest $IMAGE_URI
+
+    # 6. Subir la imagen a ECR
+    - name: Push Docker image to ECR
+      run: |
+        docker push $IMAGE_URI
+
