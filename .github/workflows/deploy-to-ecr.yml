@@ -29,9 +29,6 @@ jobs:
     # 3. Configurar variables
     - name: Set up environment variables
       run: echo "IMAGE_NAME=dev/my_app" >> $GITHUB_ENV
-    
-    - name: docker-tag
-      uses: yuya-takeyama/docker-tag-from-github-ref-action@v1
 
     # 4. Construir la imagen Docker
     - name : Build & Push Docker image
@@ -39,7 +36,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ env.IMAGE_NAME }}
-        IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        IMAGE_NAME: ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE_NAME }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -t $IMAGE_NAME:$IMAGE_TAG .
